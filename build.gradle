@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
+group 'de.eterium'
+version '0.0.1'
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'Libs'
+    }
+    maven { url = "https://repo.aikar.co/content/groups/aikar/" }
+    maven { url = "https://hub.spigotmc.org/nexus/content/groups/public/" }
+
+}
+
+compileJava {
+    options.compilerArgs += ["-parameters"]
+    options.fork = true
+    options.forkOptions.executable = 'javac'
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    compileOnly "org.bukkit:Paperspigot:1.8.8"
+    compile "co.aikar:acf-paper:0.5.0-SNAPSHOT"
+    implementation group: 'org.hibernate.orm', name: 'hibernate-core', version: '6.0.0.Alpha7'
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.0.0-alpha'
+    implementation group: 'co.aikar', name: 'taskchain-bukkit', version: '3.7.2'
+
+
+}
+
+shadowJar {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+    relocate 'co.aikar.commands', 'de.eterium.acf'
+    relocate 'co.aikar.locales', 'de.eterium.locales'
+}
+
+test {
+    useJUnitPlatform()
+}
